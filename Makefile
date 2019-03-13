@@ -3,7 +3,7 @@ SOURCE_DIR := $(shell pwd)
 
 .PHONY: docker
 docker:
-	docker build --force-rm -t devbox:latest --network host .
+	docker build --force-rm -t devbox:latest .
 
 .PHONY: up
 up:
