@@ -13,7 +13,6 @@ RUN groupadd -r developers && useradd -r -g developers dantin \
 # CentOS Package Setup
 #
 # Replace CentOS repository source to aliyun.
-#&& yum-config-manager -q --save --setopt=\*.skip_if_unavailable=1 \
 #&& rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm \
 #&& yum clean all && yum makecache fast --nogpgcheck \
 RUN rm -fr /etc/yum.repos.d/*.repo \

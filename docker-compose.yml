@@ -1,0 +1,15 @@
+version: '3.5'
+services:
+  devbox:
+    container_name: devbox
+    image: devbox
+    volumes:
+      - ${DEV_DATA_PATH:-C:\portable}:/home/dantin
+    ports:
+      - "22:22"
+    networks:
+      - dev_zone
+
+networks:
+  dev_zone:
+    driver: bridge
