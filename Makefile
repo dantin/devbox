@@ -12,3 +12,8 @@ up:
 .PHONY: down
 down:
 	docker-compose -f docker-compose.yml down --remove-orphans
+
+.PHONY: clean
+clean:
+	docker system prune --all -f
+	@docker rmi $(docker images | grep "^<none>" | awk "{print $3}")

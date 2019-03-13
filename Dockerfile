@@ -36,18 +36,21 @@ RUN rm -rf /etc/yum.repos.d/*.repo                      \
     && ssh-keygen -t rsa -N '' -f /etc/ssh/ssh_host_rsa_key \
     && sed -i '/^root/ a\dantin ALL=(ALL) NOPASSWD:ALL' /etc/sudoers
 
-# tmux dependency
+# third-party software dependency
 RUN yum install -y libevent libevent-devel ncurses-devel \
-    yum install -y autoconf zlib-devel perl-devel openssh-devel gettext-devel expat-devel curl-devel
-
+    && yum install -y autoconf zlib-devel perl-devel openssh-devel gettext-devel expat-devel curl-devel \
+    && yum install -y openssl openssl-devel libffi-devel
 
 #COPY entrypoint.sh /
 ADD code/tmux-2.8.tar.gz /root/code
 COPY scripts/tmux.sh /root/code/tmux.sh
 ADD code/git-2.20.1.tar.gz /root/code
 COPY scripts/git.sh /root/code/git.sh
+ADD code/Python-3.7.2.tgz /root/code
+COPY scripts/python.sh /root/code/python.sh
 RUN chmod u+x /root/code/tmux.sh && /root/code/tmux.sh && rm -rf /root/code/tmux-2.8 \
-    && chmod u+x /root/code/git.sh && /root/code/git.sh && rm -rf /root/code/git-2.20.1
+    && chmod u+x /root/code/git.sh && /root/code/git.sh && rm -rf /root/code/git-2.20.1 \
+    && chmod u+x /root/code/python.sh && /root/code/python.sh && rm -rf /root/code/Python-3.7.2
 
 VOLUME /home/dantin
 
