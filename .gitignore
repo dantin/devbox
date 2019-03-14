@@ -2,3 +2,4 @@ code/*
 !/code/.gitkeep
 
 *.tar
+.env

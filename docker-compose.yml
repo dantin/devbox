@@ -6,7 +6,7 @@ services:
     volumes:
       - ${DEV_DATA_PATH:-C:\portable}:/home/dantin
     ports:
-      - "22:22"
+      - "2222:22"
     networks:
       - dev_zone
 
