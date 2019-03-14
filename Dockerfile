@@ -39,7 +39,8 @@ RUN rm -rf /etc/yum.repos.d/*.repo                      \
 # third-party software dependency
 RUN yum install -y libevent libevent-devel ncurses-devel \
     && yum install -y autoconf zlib-devel perl-devel openssh-devel gettext-devel expat-devel curl-devel \
-    && yum install -y openssl openssl-devel libffi-devel
+    && yum install -y openssl openssl-devel libffi-devel \
+    && yum install -y perl-ExtUtils-Embed
 
 #COPY entrypoint.sh /
 ADD code/tmux-2.8.tar.gz /root/code
@@ -48,9 +49,12 @@ ADD code/git-2.20.1.tar.gz /root/code
 COPY scripts/git.sh /root/code/git.sh
 ADD code/Python-3.7.2.tgz /root/code
 COPY scripts/python.sh /root/code/python.sh
+ADD code/vim-8.1.0702.tar.gz /root/code
+COPY scripts/vim.sh /root/code/vim.sh
 RUN chmod u+x /root/code/tmux.sh && /root/code/tmux.sh && rm -rf /root/code/tmux-2.8 \
     && chmod u+x /root/code/git.sh && /root/code/git.sh && rm -rf /root/code/git-2.20.1 \
-    && chmod u+x /root/code/python.sh && /root/code/python.sh && rm -rf /root/code/Python-3.7.2
+    && chmod u+x /root/code/python.sh && /root/code/python.sh && rm -rf /root/code/Python-3.7.2 \
+    && chmod u+x /root/code/vim.sh && /root/code/vim.sh && rm -rf /root/code/vim-8.1.0702
 
 VOLUME /home/dantin
 
