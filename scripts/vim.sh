@@ -17,3 +17,5 @@ cd ${BASE_DIR}/vim-8.1.0702
             --enable-luainterp                 \
             --with-lua-prefix=/usr             \
             --with-compiledby="David Ding"
+make
+make install
