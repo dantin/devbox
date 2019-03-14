@@ -3,17 +3,25 @@ SOURCE_DIR := $(shell pwd)
 
 .PHONY: docker
 docker:
-	docker build --force-rm -t devbox:latest .
+	@docker build --force-rm -t devbox:latest .
 
 .PHONY: up
 up:
-	docker-compose -f docker-compose.yml up -d --force-recreate
+	@docker-compose -f docker-compose.yml up -d --force-recreate
 
 .PHONY: down
 down:
-	docker-compose -f docker-compose.yml down --remove-orphans
+	@docker-compose -f docker-compose.yml down --remove-orphans
+
+.PHONY: save
+save:
+	@docker save -o devbox.tar devbox:latest
+
+.PHONY: load
+load:
+	@docker load -i devbox.tar
 
 .PHONY: clean
 clean:
-	docker system prune --all -f
-	@docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
+	@echo "clean docker system"
+	@docker system prune -f
