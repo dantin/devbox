@@ -4,7 +4,8 @@ services:
     container_name: devbox
     image: devbox
     volumes:
-      - ${DEV_DATA_PATH:-C:\portable}:/home/dantin
+      - ${DEV_HOME_PATH:-C:\portable\home}:/home/dantin
+      - ${DEV_DATA_PATH:-C:\portable\data}:/data
     ports:
       - "2222:22"
     networks:

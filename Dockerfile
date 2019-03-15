@@ -8,12 +8,12 @@ MAINTAINER david chengjie.ding@gmail.com
 ENV DEV_VERSION 0.10
 
 # add user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
-VOLUME /home/dantin
 RUN set -ex \
-    && groupadd -r developers && useradd -r -g developers dantin \
-    && echo 'dantin:change1t' | chpasswd \
-    && chown -R dantin:developers /home/dantin
-
+        && mkdir -p /home/dantin \
+        && groupadd -r developers && useradd -r -g developers dantin \
+        && echo 'dantin:change1t' | chpasswd \
+        && chown -R dantin:developers /home/dantin
+VOLUME /home/dantin
 
 #
 # CentOS Package Setup
@@ -78,11 +78,13 @@ RUN set -ex; \
     yum install -y $buildDeps; \
     yum clean all
 
-# set environment
+# set up environment
 RUN set -ex; \
+        cat '/usr/bin/zsh' >> /etc/shells; \
         ssh-keygen -t dsa -N '' -f /etc/ssh/ssh_host_dsa_key; \
         ssh-keygen -t rsa -N '' -f /etc/ssh/ssh_host_rsa_key; \
-        sed -i '/^root/ a\dantin ALL=(ALL) NOPASSWD:ALL' /etc/sudoers
+        sed -i '/^root/ a\dantin ALL=(ALL) NOPASSWD:ALL' /etc/sudoers; \
+        sed -i '/^dantin/s#/bin/bash#/usr/bin/zsh#' /etc/passwd
 
 # build customized packages
 RUN mkdir /data && chown dantin:developers /data
@@ -99,12 +101,12 @@ COPY scripts/python.sh code/python.sh
 COPY scripts/vim.sh code/vim.sh
 
 RUN set -ex; \
-    chmod u+x code/*.sh; \
-    code/tmux.sh; \
-    code/git.sh; \
-    code/python.sh; \
-    code/vim.sh; \
-    rm -rf code
+        chmod u+x code/*.sh; \
+        code/tmux.sh; \
+        code/git.sh; \
+        code/python.sh; \
+        code/vim.sh; \
+        rm -rf code
 
 EXPOSE 22
 #CMD ["/entrypoint.sh"]
