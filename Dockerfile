@@ -5,7 +5,8 @@
 FROM centos:centos7
 MAINTAINER david chengjie.ding@gmail.com
 
-ENV DEV_VERSION 0.10
+ENV DEV_VERSION=0.10 \
+    DEV_USER=dantin
 
 # add user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN set -ex \
@@ -74,9 +75,25 @@ RUN set -ex; \
             perl-ExtUtils-Embed \
             cmake \
             python-devel \
+            dpkg \
         "; \
     yum install -y $buildDeps; \
-    yum clean all
+    yum clean all;
+
+# Install gosu
+ARG GOSU_VERSION="1.10"
+RUN set -ex; \
+        dpkgArch="$(dpkg --print-architecture | awk -F- '{ print $NF  }')"; \
+        wget -O /usr/bin/gosu "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch"; \
+        wget -O /tmp/gosu.asc "https://github.com/tianon/gosu/releases/download/$GOSU_VERSION/gosu-$dpkgArch.asc"; \
+        export GNUPGHOME="$(mktemp -d)"; \
+        gpg --keyserver ha.pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4; \
+        gpg --batch --verify /tmp/gosu.asc /usr/bin/gosu; \
+        rm -r "$GNUPGHOME" /tmp/gosu.asc; \
+        yum -y remove dpkg; \
+        chmod +x /usr/bin/gosu; \
+        rm -rf /var/cache/yum; \
+        rm -rf /var/log/yum.log
 
 # set up environment
 RUN set -ex; \
@@ -84,7 +101,7 @@ RUN set -ex; \
         ssh-keygen -t dsa -N '' -f /etc/ssh/ssh_host_dsa_key; \
         ssh-keygen -t rsa -N '' -f /etc/ssh/ssh_host_rsa_key; \
         sed -i '/^root/ a\dantin ALL=(ALL) NOPASSWD:ALL' /etc/sudoers; \
-        sed -i '/^dantin/s#/bin/bash#/usr/bin/zsh#' /etc/passwd
+        sed -i '/^dantin/s#/bin/bash#/usr/bin/zsh#' /etc/passwd;
 
 # build customized packages
 RUN mkdir /data && chown dantin:developers /data
@@ -106,8 +123,10 @@ RUN set -ex; \
         code/git.sh; \
         code/python.sh; \
         code/vim.sh; \
-        rm -rf code
+        rm -rf code;
+
+COPY entrypoint.sh /
 
 EXPOSE 22
-#CMD ["/entrypoint.sh"]
-CMD ["/usr/sbin/sshd", "-D"]
+
+CMD ["/entrypoint.sh"]
