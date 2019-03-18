@@ -104,7 +104,7 @@ RUN set -ex; \
         sed -i '/^dantin/s#/bin/bash#/usr/bin/zsh#' /etc/passwd;
 
 # build customized packages
-RUN mkdir /data && chown dantin:developers /data
+RUN mkdir /data && chown -R dantin:developers /data
 VOLUME /data
 WORKDIR /data
 
@@ -129,4 +129,5 @@ COPY entrypoint.sh /
 
 EXPOSE 22
 
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
+CMD ["/bin/bash"]
