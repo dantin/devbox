@@ -16,3 +16,9 @@ ln -s $HOME/documents/code/dotfile/tmux.conf $HOME/.tmux.conf
 # install vim plugins
 $HOME/.vim/update_plugin.sh
 vim +PlugInstall +qall
+cd $HOME/.vim/plugged/YouCompleteMe
+python3.7 install.py
+
+# install oh-my-zsh
+cd $HOME
+sh -c "$(curl -fsSL https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
