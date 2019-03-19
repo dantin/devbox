@@ -48,7 +48,6 @@ RUN set -ex; \
         yum makecache fast --nogpgcheck; \
         \
         buildDeps=" \
-            inetutils-ping \
             iproute \
             net-tools \
             wget \
@@ -64,15 +63,15 @@ RUN set -ex; \
             libevent libevent-devel \
             ncurses-devel \
             autoconf \
+            perl-ExtUtils-Embed \
             zlib-devel \
             perl-devel \
-            openssh openssh-devel \
+            openssh \
             gettext-devel \
             expat-devel \
             curl-devel \
             openssl openssl-devel \
             libffi-devel \
-            perl-ExtUtils-Embed \
             cmake \
             python-devel \
             dpkg \
