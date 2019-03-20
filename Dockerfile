@@ -65,6 +65,9 @@ RUN set -ex; \
             autoconf \
             perl-ExtUtils-Embed \
             zlib-devel \
+            bzip2-devel bzip2-libs \
+            readline readline-devel \
+            sqlite-devel \
             perl-devel \
             openssh \
             gettext-devel \
